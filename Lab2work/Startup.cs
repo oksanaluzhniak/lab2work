@@ -49,7 +49,7 @@ namespace Lab2work
                 {
                     WriteIndented = true
                 };
-                People people = new People("D:\\4year\\Diplom\\person.txt");                
+                People people = new People("/user/src/app/shared_folder/users.txt");                
                 if (people != null)
                 {
                     await context.Response.WriteAsync(JsonSerializer.Serialize(people.DataPeople,options));
@@ -62,7 +62,7 @@ namespace Lab2work
         }
         private static void SearchByEmail(IApplicationBuilder app)
         {
-            People people = new People("D:\\4year\\Diplom\\person.txt");
+            People people = new People("/user/src/app/shared_folder/users.txt");
             app.Run(async context =>
             {
                 string email = context.Request.Query["email"];
@@ -71,7 +71,7 @@ namespace Lab2work
         }
         private static void FindSex(IApplicationBuilder app)
         {
-            People people = new People("D:\\4year\\Diplom\\person.txt");
+            People people = new People("/user/src/app/shared_folder/users.txt");
             app.Run(async context =>
             {
                 var options = new JsonSerializerOptions
@@ -84,14 +84,14 @@ namespace Lab2work
         }
         private static void DelPerson(IApplicationBuilder app)
         {
-            string filename = "D:\\4year\\Diplom\\person.txt";
+            string filename = "/user/src/app/shared_folder/users.txt";
             People people = new People(filename);
             app.Run(async context =>
             {
                 string email = context.Request.Query["email"];
                 string delpersname=people.SearchByEmail(email).FirstName;
                 people.DeletePerson(email, filename);
-                await context.Response.WriteAsync(string.Format("Видалено {0} зі списку",delpersname));
+                await context.Response.WriteAsync(string.Format("Person {0} is succesful deleted",delpersname));
             });
         }
         private static void AddPers(IApplicationBuilder app)
@@ -102,14 +102,14 @@ namespace Lab2work
                 {
                     WriteIndented = true
                 };
-                People people = new People("D:\\4year\\Diplom\\person.txt");
+                People people = new People("/user/src/app/shared_folder/users.txt");
                 var request = context.Request.Body; 
                 using (StreamReader reader = new StreamReader(request))
                 {
                     string body = await reader.ReadToEndAsync();
                     Person person = new Person();
                     var form = JsonSerializer.Deserialize<Person>(body);
-                    string answer= people.AddPerson(form, "D:\\4year\\Diplom\\person.txt");                    
+                    string answer= people.AddPerson(form, "/user/src/app/shared_folder/users.txt");                    
                     await context.Response.WriteAsync(answer);
                 }                
             });
